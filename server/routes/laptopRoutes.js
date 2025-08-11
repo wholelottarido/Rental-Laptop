@@ -2,18 +2,17 @@ const express = require('express');
 const { 
     getLaptops, 
     createLaptop,
-    getAllLaptopsForAdmin, // <-- DITAMBAHKAN
-    updateLaptop,          // <-- DITAMBAHKAN
-    deleteLaptop,          // <-- DITAMBAHKAN
+    getAllLaptopsForAdmin, 
+    updateLaptop,          
+    deleteLaptop,          
     updateLaptopStatus ,
-    getLaptopById     // <-- DITAMBAHKAN
+    getLaptopById    
 } = require('../controllers/laptopController');
 const { protect, admin } = require('../middleware/authMiddleware');
-const upload = require('../middleware/uploadMiddleware'); // <-- DITAMBAHKAN
+const upload = require('../middleware/uploadMiddleware'); 
 
 const router = express.Router();
 
-// Rute untuk mendapatkan semua laptop (untuk admin)
 router.route('/admin').get(protect, admin, getAllLaptopsForAdmin);
 
 // Rute untuk publik dan membuat laptop baru (dengan upload gambar)
