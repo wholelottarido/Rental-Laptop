@@ -1,26 +1,34 @@
 const mysql = require('mysql2/promise');
-const dotenv = require('dotenv');
 
-dotenv.config();
+// ======================================================================
+// !! GANTI SEMUA YANG ADA DI DALAM TANDA KUTIP DENGAN CONNECTION URL ANDA !!
+const DATABASE_URL = "mysql://root:UhkhbexWLWHwHMvZHQfJXPvDvUApEOLk@tramway.proxy.rlwy.net:29331/railway";
+// ======================================================================
+
+// Cek apakah URL sudah diisi. Jika belum, hentikan aplikasi.
+if (DATABASE_URL.includes("passwordAnda") || DATABASE_URL.includes("hostAnda")) {
+  console.error("!!! KESALAHAN: Harap ganti placeholder DATABASE_URL di db.js dengan Connection URL asli dari Railway !!!");
+  process.exit(1);
+}
 
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+  uri: DATABASE_URL,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-// Test the connection
-pool.getConnection()
-    .then(connection => {
-        console.log('Koneksi ke database MySQL berhasil!');
-        connection.release();
-    })
-    .catch(err => {
-        console.error('Gagal terkoneksi ke database:', err);
-    });
+const checkConnection = async () => {
+  try {
+    const connection = await pool.getConnection();
+    console.log('✅✅✅ DATABASE BERHASIL TERKONEKSI! SELAMAT! ✅✅✅');
+    connection.release();
+  } catch (error) {
+    console.error('❌ Gagal terkoneksi ke database:', error);
+    process.exit(1);
+  }
+};
+
+checkConnection();
 
 module.exports = pool;
