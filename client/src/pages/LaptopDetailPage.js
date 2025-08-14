@@ -60,18 +60,18 @@ const LaptopDetailPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     {/* Kolom Gambar */}
                     <div className="p-4">
-                        <img 
-                            src={`${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}`} 
-                            alt={`${laptop.brand} ${laptop.model}`} 
+                        <img
+                            // Logika yang sama: cek dulu sebelum menampilkan.
+                            src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Tidak+Tersedia'}
+                            alt={`${laptop.brand} ${laptop.model}`}
                             className="w-full h-auto object-cover rounded-lg"
                         />
                     </div>
                     {/* Kolom Detail */}
                     <div className="p-6 flex flex-col justify-between">
                         <div>
-                            <span className={`px-3 py-1 text-sm font-semibold rounded-full capitalize ${
-                                canRent ? 'text-green-900 bg-green-200' : 'text-red-900 bg-red-200'
-                            }`}>
+                            <span className={`px-3 py-1 text-sm font-semibold rounded-full capitalize ${canRent ? 'text-green-900 bg-green-200' : 'text-red-900 bg-red-200'
+                                }`}>
                                 {laptop.status}
                             </span>
                             <h1 className="text-4xl font-bold text-gray-800 mt-2">{laptop.brand} {laptop.model}</h1>
@@ -85,14 +85,14 @@ const LaptopDetailPage = () => {
                             </div>
                         </div>
                         <div className="mt-8 flex items-center space-x-4">
-                            <button 
+                            <button
                                 onClick={handleRentNow}
                                 disabled={!canRent}
                                 className="flex-1 bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 disabled:bg-gray-400"
                             >
                                 Sewa Sekarang
                             </button>
-                            <button 
+                            <button
                                 onClick={handleAddToCart}
                                 className="p-3 rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
                                 title="Tambah ke Keranjang"

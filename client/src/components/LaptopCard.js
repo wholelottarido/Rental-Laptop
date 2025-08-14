@@ -58,10 +58,10 @@ const LaptopCard = ({ laptop }) => {
         <Link to={`/laptops/${laptop.id}`} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 ease-in-out flex flex-col no-underline">
             <div className="relative">
                 <img
-                    src={`${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}`}
+                    // Cek dulu apakah laptop.image_url ada. Jika tidak, pakai placeholder.
+                    src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Tidak+Tersedia'}
                     alt={`${laptop.brand} ${laptop.model}`}
                     className="w-full h-48 object-cover"
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Error' }}
                 />
                 <div className={`absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded-full ${currentStatus.badgeClass}`}>
                     {currentStatus.label}
