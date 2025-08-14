@@ -13,8 +13,8 @@ API.interceptors.request.use((req) => {
 });
 
 // ... (fungsi-fungsi lain tetap sama) ...
-export const login = (formData) => API.post('/auth/login', formData);
-export const register = (formData) => API.post('/auth/register', formData);
+export const login = (formData) => API.post('/users/login', formData);
+export const register = (formData) => API.post('/users/register', formData);
 export const fetchLaptops = () => API.get('/laptops');
 export const fetchAllLaptopsForAdmin = () => API.get('/laptops/admin');
 export const createLaptop = (formData) => API.post('/laptops', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
