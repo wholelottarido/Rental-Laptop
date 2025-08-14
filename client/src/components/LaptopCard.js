@@ -46,20 +46,13 @@ const LaptopCard = ({ laptop }) => {
     };
     const currentStatus = statusInfo[laptop.status] || statusInfo.maintenance;
     const canRentNow = laptop.status === 'available';
-    let imageUrl = laptop.image_url;
-    if (imageUrl && !imageUrl.startsWith('http')) {
-        imageUrl = `http://localhost:5000${laptop.image_url}`;
-    }
-    if (!imageUrl) {
-        imageUrl = 'https://placehold.co/600x400/e2e8f0/4a5568?text=No+Image';
-    }
 
     return (
         <Link to={`/laptops/${laptop.id}`} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 ease-in-out flex flex-col no-underline">
             <div className="relative">
                 <img
-                    // Cek dulu apakah laptop.image_url ada. Jika tidak, pakai placeholder.
-                    src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Tidak+Tersedia'}
+                    // Versi ini tidak menambahkan /uploads/ karena sudah ada di dalam laptop.image_url
+                    src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Tdk+Ada'}
                     alt={`${laptop.brand} ${laptop.model}`}
                     className="w-full h-48 object-cover"
                 />

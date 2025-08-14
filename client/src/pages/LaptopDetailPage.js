@@ -61,10 +61,10 @@ const LaptopDetailPage = () => {
                     {/* Kolom Gambar */}
                     <div className="p-4">
                         <img
-                            // Logika yang sama: cek dulu sebelum menampilkan.
-                            src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Tidak+Tersedia'}
+                            // Versi ini tidak menambahkan /uploads/ karena sudah ada di dalam laptop.image_url
+                            src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Tdk+Ada'}
                             alt={`${laptop.brand} ${laptop.model}`}
-                            className="w-full h-auto object-cover rounded-lg"
+                            className="w-full h-48 object-cover"
                         />
                     </div>
                     {/* Kolom Detail */}
