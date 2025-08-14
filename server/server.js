@@ -13,8 +13,6 @@ const cartRoutes = require('./routes/cartRoutes'); // <-- DITAMBAHKAN
 
 const app = express();
 
-const cors = require('cors');
-
 // --- MEMO UNTUK SATPAM ---
 const corsOptions = {
   origin: 'https://rental-laptop-nine.vercel.app',
