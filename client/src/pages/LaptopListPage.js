@@ -12,19 +12,41 @@ const LaptopListPage = () => {
   const [sortBy, setSortBy] = useState('default'); // 'default', 'price_asc', 'price_desc'
 
   useEffect(() => {
-    const getLaptops = async () => {
-      try {
-        const { data } = await fetchLaptops();
-        setLaptops(data);
-      } catch (err) {
-        setError('Gagal memuat data laptop. Pastikan server backend berjalan.');
-        console.error(err);
-      } finally {
-        setLoading(false);
+  // Fungsi asli Anda untuk mengambil data
+  const getLaptops = async () => {
+    try {
+      const { data } = await fetchLaptops();
+      setLaptops(data);
+    } catch (err) {
+      // Kita lempar lagi errornya agar bisa ditangkap oleh fungsi retry
+      throw err;
+    }
+  };
+
+  // Fungsi baru yang membungkus getLaptops dengan logika retry
+  const fetchLaptopsWithRetry = async (retries = 2) => { // Coba total 3x
+    try {
+      console.log("Mencoba mengambil data laptop...");
+      await getLaptops();
+      console.log("✅ Data berhasil dimuat!");
+      setLoading(false); // Matikan loading jika berhasil
+    } catch (error) {
+      console.error(`Gagal mengambil data (sisa percobaan: ${retries}):`, error);
+      if (retries > 0) {
+        console.log("Mencoba lagi dalam 3 detik...");
+        setTimeout(() => fetchLaptopsWithRetry(retries - 1), 3000); // Tunggu 3 detik
+      } else {
+        console.error("Gagal total mengambil data setelah beberapa kali percobaan.");
+        setError('Gagal memuat data laptop. Silakan coba refresh halaman.');
+        setLoading(false); // Matikan loading jika gagal total
       }
-    };
-    getLaptops();
-  }, []);
+    }
+  };
+
+  // Panggil fungsi yang bisa melakukan retry
+  fetchLaptopsWithRetry();
+
+}, []); // Dependency array kosong agar hanya berjalan sekali saat komponen dimuat
 
   // Gunakan useMemo untuk memfilter dan mengurutkan data tanpa memanggil API ulang
   const filteredAndSortedLaptops = useMemo(() => {
