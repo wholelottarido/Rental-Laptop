@@ -14,6 +14,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Menyajikan file statis dari folder 'uploads'
+app.use('/uploads', express.static('uploads'));
+
 // Rute dasar untuk tes
 app.get('/', (req, res) => {
   res.send('Halo, ini adalah backend untuk Rental Laptop!');
