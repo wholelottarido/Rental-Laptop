@@ -1,43 +1,32 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const path = require('path');
-
-dotenv.config();
-
-// Import routes
-const authRoutes = require('./routes/authRoutes');
-const laptopRoutes = require('./routes/laptopRoutes');
-const rentalRoutes = require('./routes/rentalRoutes');
-const cartRoutes = require('./routes/cartRoutes'); // <-- DITAMBAHKAN
+require('dotenv').config();
+const pool = require('./config/db'); // Memanggil file db.js yang sudah kita perbaiki
 
 const app = express();
 
-// --- MEMO UNTUK SATPAM ---
+// Konfigurasi CORS yang benar untuk Vercel
 const corsOptions = {
   origin: 'https://rental-laptop-nine.vercel.app',
-  optionsSuccessStatus: 200 // beberapa browser lama butuh ini
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
-// -------------------------
-
-app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/laptops', laptopRoutes);
-app.use('/api/rentals', rentalRoutes);
-app.use('/api/cart', cartRoutes); // <-- DITAMBAHKAN
-
+// Tes rute dasar
 app.get('/', (req, res) => {
-    res.send('API Server untuk Rental Laptop sedang berjalan...');
+  res.send('Halo, ini adalah backend untuk Rental Laptop!');
 });
 
+// Semua rute API Anda
+app.use('/api/users', require('./routes/users'));
+// Tambahkan rute lain jika ada
+// app.use('/api/laptops', require('./routes/laptops'));
+
+// Menggunakan Port dinamis dari Railway atau 5000 jika lokal
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server berjalan di port ${PORT}`);
 });
