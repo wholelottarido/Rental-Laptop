@@ -1,7 +1,7 @@
 import React from 'react';
-import { addToCart } from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
-import toast from 'react-hot-toast'; // Impor toast
+import toast from 'react-hot-toast';
+import { addToCart } from '../services/api';
 
 const LaptopCard = ({ laptop }) => {
     const navigate = useNavigate();
@@ -11,12 +11,9 @@ const LaptopCard = ({ laptop }) => {
         e.preventDefault();
         try {
             await addToCart(laptop.id);
-            // Ganti alert dengan toast.success
             toast.success(`${laptop.brand} ${laptop.model} berhasil ditambahkan!`);
-            // Untuk sementara biarkan reload agar count di header update
-            setTimeout(() => window.location.reload(), 1000);
+            setTimeout(() => window.location.reload(), 1000); 
         } catch (error) {
-            // Ganti alert dengan toast.error
             if (error.response?.status === 401) {
                 toast.error('Anda harus login terlebih dahulu.');
                 navigate('/login');
@@ -31,7 +28,6 @@ const LaptopCard = ({ laptop }) => {
         e.preventDefault();
         const user = localStorage.getItem('user');
         if (!user) {
-            // Ganti alert dengan toast.error
             toast.error('Anda harus login untuk menyewa laptop.');
             navigate('/login');
             return;
@@ -47,11 +43,13 @@ const LaptopCard = ({ laptop }) => {
     const currentStatus = statusInfo[laptop.status] || statusInfo.maintenance;
     const canRentNow = laptop.status === 'available';
 
+    // BLOK LOGIKA GAMBAR LAMA SUDAH DIHAPUS DARI SINI
+
     return (
         <Link to={`/laptops/${laptop.id}`} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 ease-in-out flex flex-col no-underline">
             <div className="relative">
+                {/* INI SATU-SATUNYA LOGIKA GAMBAR YANG BENAR */}
                 <img
-                    // Versi ini tidak menambahkan /uploads/ karena sudah ada di dalam laptop.image_url
                     src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Tdk+Ada'}
                     alt={`${laptop.brand} ${laptop.model}`}
                     className="w-full h-48 object-cover"
