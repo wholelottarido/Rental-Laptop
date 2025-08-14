@@ -43,12 +43,12 @@ const AdminLaptopManagement = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Apakah Anda yakin ingin menghapus laptop ini?')) {
+        if (window.confirm('Apakah Anda yakin ingin menghapus laptop ini? Ini akan menghapus semua riwayat sewanya juga.')) {
             try {
                 await deleteLaptop(id);
                 loadLaptops();
             } catch (err) {
-                setError('Gagal menghapus laptop.');
+                setError(err.response?.data?.message || 'Gagal menghapus laptop.');
             }
         }
     };
@@ -84,9 +84,8 @@ const AdminLaptopManagement = () => {
 
             {error && <p className="text-red-500 bg-red-100 p-3 rounded-lg mb-4">{error}</p>}
 
-            <div className="bg-white shadow-lg rounded-lg">
+            <div className="bg-white shadow-lg rounded-lg overflow-x-auto">
                 <table className="min-w-full leading-normal">
-                    {/* ... (thead dari tabel laptop) ... */}
                     <thead>
                         <tr>
                             <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Gambar</th>
@@ -97,11 +96,15 @@ const AdminLaptopManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* ... (tbody dari tabel laptop) ... */}
                         {laptops.map(laptop => (
                             <tr key={laptop.id}>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                    <img src={`http://localhost:5000${laptop.image_url}`} alt={laptop.model} className="w-20 h-auto object-cover rounded"/>
+                                    {/* INI BAGIAN YANG DIPERBAIKI */}
+                                    <img 
+                                        src={laptop.image_url ? `${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}` : 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gbr+Tdk+Ada'} 
+                                        alt={laptop.model} 
+                                        className="w-20 h-auto object-cover rounded"
+                                    />
                                 </td>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                     <p className="text-gray-900 whitespace-no-wrap font-semibold">{laptop.brand}</p>
@@ -120,7 +123,7 @@ const AdminLaptopManagement = () => {
                                                 <div className="py-1">
                                                     {['available', 'rented', 'maintenance'].map(status => (
                                                         <a key={status} href="#" onClick={(e) => { e.preventDefault(); handleStatusChange(laptop.id, status);}} className={`flex items-center px-4 py-2 text-sm ${ laptop.status === status ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} hover:bg-gray-100 hover:text-gray-900`}>
-                                                           <span className={`inline-block w-2 h-2 mr-3 rounded-full ${ status === 'available' ? 'bg-green-500' : status === 'rented' ? 'bg-red-500' : 'bg-amber-500'}`}></span>
+                                                            <span className={`inline-block w-2 h-2 mr-3 rounded-full ${ status === 'available' ? 'bg-green-500' : status === 'rented' ? 'bg-red-500' : 'bg-amber-500'}`}></span>
                                                             Ubah ke <span className="font-semibold ml-1 capitalize">{status}</span>
                                                         </a>
                                                     ))}
