@@ -61,7 +61,7 @@ const LaptopDetailPage = () => {
                     {/* Kolom Gambar */}
                     <div className="p-4">
                         <img 
-                            src={laptop.image_url && !laptop.image_url.startsWith('http') ? `http://localhost:5000${laptop.image_url}` : laptop.image_url} 
+                            src={`${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}`} 
                             alt={`${laptop.brand} ${laptop.model}`} 
                             className="w-full h-auto object-cover rounded-lg"
                         />

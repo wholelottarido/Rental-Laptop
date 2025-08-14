@@ -14,7 +14,7 @@ const LaptopCard = ({ laptop }) => {
             // Ganti alert dengan toast.success
             toast.success(`${laptop.brand} ${laptop.model} berhasil ditambahkan!`);
             // Untuk sementara biarkan reload agar count di header update
-            setTimeout(() => window.location.reload(), 1000); 
+            setTimeout(() => window.location.reload(), 1000);
         } catch (error) {
             // Ganti alert dengan toast.error
             if (error.response?.status === 401) {
@@ -38,7 +38,7 @@ const LaptopCard = ({ laptop }) => {
         }
         navigate('/checkout', { state: { items: [laptop] } });
     };
-    
+
     const statusInfo = {
         available: { label: 'Tersedia', badgeClass: 'bg-green-100 text-green-800' },
         rented: { label: 'Disewa', badgeClass: 'bg-red-100 text-red-800' },
@@ -57,7 +57,12 @@ const LaptopCard = ({ laptop }) => {
     return (
         <Link to={`/laptops/${laptop.id}`} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 ease-in-out flex flex-col no-underline">
             <div className="relative">
-                <img src={imageUrl} alt={`${laptop.brand} ${laptop.model}`} className="w-full h-48 object-cover" onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Error' }}/>
+                <img
+                    src={`${process.env.REACT_APP_API_URL.replace('/api', '')}${laptop.image_url}`}
+                    alt={`${laptop.brand} ${laptop.model}`}
+                    className="w-full h-48 object-cover"
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/e2e8f0/4a5568?text=Gambar+Error' }}
+                />
                 <div className={`absolute top-2 right-2 px-2 py-1 text-xs font-bold rounded-full ${currentStatus.badgeClass}`}>
                     {currentStatus.label}
                 </div>
@@ -71,7 +76,7 @@ const LaptopCard = ({ laptop }) => {
                         <span className="text-sm font-normal text-gray-500">/hari</span>
                     </span>
                     <div className="flex items-center space-x-2">
-                        <button disabled={!canRentNow} onClick={handleRentNow} className={`px-3 py-2 text-xs font-bold text-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 ${ canRentNow ? 'bg-green-600 hover:bg-green-700 focus:ring-green-400' : 'bg-gray-400 cursor-not-allowed'}`}>
+                        <button disabled={!canRentNow} onClick={handleRentNow} className={`px-3 py-2 text-xs font-bold text-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-opacity-75 ${canRentNow ? 'bg-green-600 hover:bg-green-700 focus:ring-green-400' : 'bg-gray-400 cursor-not-allowed'}`}>
                             Sewa
                         </button>
                         <button onClick={handleAddToCart} className="p-2 rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" title="Tambah ke Keranjang">
